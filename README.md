@@ -1,12 +1,12 @@
 ## 🌐 WebAPI em .NET 6 com Dapper e MimeKit
 
 O projeto foi desenvolvido como uma WebAPI em .NET 6, utilizando tecnologias como:
-  🛠️ Dapper
-  🛠️ AutoMapper
-  🛠️ Serilog
-  🛠️ MailKit e MimeKit
-  🛠️ Repository Pattern
-  🛠️ Arquitetura de camadas
+  - 🛠️ Dapper
+  - 🛠️ AutoMapper
+  - 🛠️ Serilog
+  - 🛠️ MailKit e MimeKit
+  - 🛠️ Repository Pattern
+  - 🛠️ Arquitetura de camadas
 
 A finalidade do projeto era a curiosidade de como é desenvolvido um software para envio de e-mails e aproveitar também para solidificar e compreender conceitos de mapeamento de entidades com Dtos e AutoMapper e uso de persistência em banco com Dapper, e uso do Serilog para efetuar logs persistidos diretamente em banco.
 
@@ -16,11 +16,11 @@ A API é acessível via Swagger e o projeto conta com apenas dois endpoints, sen
 
 O projeto é organizado em uma solução com três projetos, sendo um projeto de WebAPI e dois projetos de bibliotecas de classes. Sendo eles:
 
-  WebMail.API: Contém os controladores, Dtos e serviços responsáveis por gerenciar as requisições, criar e-mails e consumir as camadas de domínio e infraestrutura. Esta camada também possui um serviço de background responsável por consultar os e-mail que devem ser enviados periodicamente e então enviá-los.
+  - WebMail.API: Contém os controladores, Dtos e serviços responsáveis por gerenciar as requisições, criar e-mails e consumir as camadas de domínio e infraestrutura. Esta camada também possui um serviço de background responsável por consultar os e-mail que devem ser enviados periodicamente e então enviá-los.
 
-  WebMail.Domain: Contém a classe de domínio que representa a entidade de e-mail.
+  - WebMail.Domain: Contém a classe de domínio que representa a entidade de e-mail.
 
-  WebMail.Infrastructure: Camada de acesso ao banco através de dapper com SQL.
+  - WebMail.Infrastructure: Camada de acesso ao banco através de dapper com SQL.
 
 ### 💡 Funcionamento
 
@@ -33,10 +33,10 @@ As configurações de connection string e provedor de e-mail são todas feitas n
 ### ⏏️ Oportunidades de Melhoria
 
 Entre as oportunidades de melhoria do sistema, temos:
-  ✔️ Remoção do código Sql da camada de infraestrutura, deixando toda a abstração por conta do Dapper ou substituindo o Dapper pelo Entity Framework;
-  ✔️ Reorganizar as camadas, levando os Dtos e interfaces para a camada de domínio;
-  ✔️ Criação de uma camada de aplicação para separar os serviços da camada de API;
-  ✔️ Adição de validação na criação de e-mail de forma a conferir se os endereços de e-mails são válidos;
-  ✔️ Modificar o funcionamento periódico do serviço de envio de e-mail de forma a prevenir o pooling no banco de dados;
-  ✔️ Incluir o padrão Result e remover o uso de exceptions no envio de e-mail para que isso não bloqueie o fluxo e ele possa logar os resultados de cada envio mal sucedido e marcar no banco os e-mails que não puderam ser enviados;
-  ✔️ Seguindo a ideia anterior, disponibilizar uma rota para consulta de e-mails com envio mal sucedido, filtrado por tempo e com paginação, dando possibilidade para que o usuário possa tentar reenviar futuramente, efetuando as devidas correções para a conclusão do envio.    
+  - ✔️ Remoção do código Sql da camada de infraestrutura, deixando toda a abstração por conta do Dapper ou substituindo o Dapper pelo Entity Framework;
+  - ✔️ Reorganizar as camadas, levando os Dtos e interfaces para a camada de domínio;
+  - ✔️ Criação de uma camada de aplicação para separar os serviços da camada de API;
+  - ✔️ Adição de validação na criação de e-mail de forma a conferir se os endereços de e-mails são válidos;
+  - ✔️ Modificar o funcionamento periódico do serviço de envio de e-mail de forma a prevenir o pooling no banco de dados;
+  - ✔️ Incluir o padrão Result e remover o uso de exceptions no envio de e-mail para que isso não bloqueie o fluxo e ele possa logar os resultados de cada envio mal sucedido e marcar no banco os e-mails que não puderam ser enviados;
+  - ✔️ Seguindo a ideia anterior, disponibilizar uma rota para consulta de e-mails com envio mal sucedido, filtrado por tempo e com paginação, dando possibilidade para que o usuário possa tentar reenviar futuramente, efetuando as devidas correções para a conclusão do envio.    
