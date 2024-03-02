@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+
 using WebMail.API.Dtos;
 using WebMail.API.Interfaces;
 
@@ -22,7 +23,8 @@ namespace WebMail.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateEmail([FromBody] CreateEmailRequest createEmailRequest)
         {
-            _logger.LogInformation("Requisição para criação de um e-mail", createEmailRequest);
+            _logger.LogDebug("Requisição para criação de um e-mail", createEmailRequest);
+
             var createEmailResponse = await _createEmail.CreateEmail(createEmailRequest);
 
             return CreatedAtAction(nameof(GetEmailById), new { id = createEmailResponse.Id }, createEmailResponse);
@@ -33,7 +35,8 @@ namespace WebMail.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetEmailById(int id)
         {
-            _logger.LogInformation("Requisição para buscar um e-mail de id {id}", id);
+            _logger.LogDebug("Requisição para buscar um e-mail de id {id}", id);
+
             var getEmailResponse = await _createEmail.GetEmailById(id);
 
             if (getEmailResponse == null)

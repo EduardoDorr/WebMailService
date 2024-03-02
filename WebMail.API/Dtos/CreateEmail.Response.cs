@@ -1,9 +1,8 @@
 ﻿using WebMail.Domain.Models;
 
-namespace WebMail.API.Dtos
+namespace WebMail.API.Dtos;
+
+public sealed class CreateEmailResponse : BaseEntity
 {
-    public class CreateEmailResponse : BaseEntity
-    {
-        public DateTime GenerationDate { get; set; }
-    }
+    public DateTime GenerationDate { get; set; }
 }

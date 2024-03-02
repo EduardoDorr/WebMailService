@@ -1,12 +1,17 @@
 using Microsoft.OpenApi.Models;
+
 using Serilog;
+
 using WebMail.API.Services;
 using WebMail.API.Interfaces;
 using WebMail.Infrastructure.Interfaces;
 using WebMail.Infrastructure.Repositories;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseWindowsService();
 var connectionString = builder.Configuration.GetValue<string>("DatabaseSettings:ConnectionString");
+var port = builder.Configuration.GetValue<int>("ApiSettings:Port");
 ConfigureSerilog(builder, connectionString);
 
 try
@@ -40,7 +45,7 @@ static void ConfigureServices(IServiceCollection services)
 
     services.AddSingleton<IEmailRepository, EmailRepository>();
     services.AddScoped<ICreateEmailService, CreateEmailService>();
-    services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+    services.AddAutoMapper(Assembly.GetExecutingAssembly());
     services.AddHostedService<SendEmailService>();
     services.AddControllers();
     services.AddEndpointsApiExplorer();
@@ -68,7 +73,7 @@ static void ConfigureApplication(WebApplication app)
         app.UseSwaggerUI();
     }
 
-    app.UseHttpsRedirection();
+    //app.UseHttpsRedirection();
 
     app.UseAuthorization();
 

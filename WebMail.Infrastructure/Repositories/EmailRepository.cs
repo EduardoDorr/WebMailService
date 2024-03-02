@@ -1,10 +1,13 @@
 ﻿using System.Text;
 using System.Data.SqlClient;
+
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
+
 using Dapper;
+
 using WebMail.Domain.Models;
 using WebMail.Infrastructure.Interfaces;
-using Microsoft.Extensions.Logging;
 
 namespace WebMail.Infrastructure.Repositories
 {
@@ -23,7 +26,8 @@ namespace WebMail.Infrastructure.Repositories
 
         public async Task<int> CreateEmail(Email email)
         {
-            _logger.LogInformation("Requisição para criação de um e-mail", email);
+            _logger.LogDebug("Requisição para criação de um e-mail", email);
+
             var query = new StringBuilder();
             query.Clear()
                  .AppendLine("INSERT INTO SendEmail ")
@@ -33,19 +37,21 @@ namespace WebMail.Infrastructure.Repositories
                  .AppendLine("   @Destiny,          ")
                  .AppendLine("   @Subject,          ")
                  .AppendLine("   @Body,             ")
+                 .AppendLine("   @Attachment,       ")
                  .AppendLine("   @GenerationDate,   ")
                  .AppendLine("   NULL)              ");
 
-            var parameters = new { email.Origin, email.Destiny, email.Subject, email.Body, email.GenerationDate };
+            var parameters = new { email.Origin, email.Destiny, email.Subject, email.Body, email.Attachment, email.GenerationDate };
 
             using var sqlConnection = new SqlConnection(_connectionString);
             
             return await sqlConnection.ExecuteScalarAsync<int>(query.ToString(), parameters);
         }
 
-        public async Task<Email> GetEmailById(int id)
+        public async Task<Email?> GetEmailById(int id)
         {
-            _logger.LogInformation("Requisição para buscar um e-mail de id {id}", id);
+            _logger.LogDebug("Requisição para buscar um e-mail de id {id}", id);
+
             var query = new StringBuilder();
             query.Clear()
                  .AppendLine("SELECT TOP 1  ")
@@ -64,6 +70,8 @@ namespace WebMail.Infrastructure.Repositories
 
         public async Task<IEnumerable<Email>> GetEmails()
         {
+            _logger.LogDebug("Requisição para buscar todos os e-mails");
+
             var query = new StringBuilder();
             query.Clear()
                  .AppendLine("SELECT        ")
@@ -78,7 +86,8 @@ namespace WebMail.Infrastructure.Repositories
 
         public async Task<IEnumerable<Email>> GetEmailsNotSended()
         {
-            _logger.LogInformation("Busca por e-mails não enviados");
+            _logger.LogDebug("Busca por e-mails não enviados");
+
             var query = new StringBuilder();
             query.Clear()
                  .AppendLine("SELECT                ")
@@ -95,7 +104,8 @@ namespace WebMail.Infrastructure.Repositories
 
         public async Task<bool> UpdateEmail(int id)
         {
-            _logger.LogInformation("E-mail teve a data de envio atualizada", id);
+            _logger.LogDebug("E-mail teve a data de envio atualizada", id);
+
             var query = new StringBuilder();
             query.Clear()
                  .AppendLine("UPDATE                    ")

@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebMail.API", "WebMail.API\WebMail.API.csproj", "{8D39C478-6438-470B-A0EA-DB2ECC0DAF8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebMail.API", "WebMail.API\WebMail.API.csproj", "{8D39C478-6438-470B-A0EA-DB2ECC0DAF8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebMail.Domain", "WebMail.Domain\WebMail.Domain.csproj", "{EC648761-5A07-4EC6-97F5-39A64D6CB71E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebMail.Domain", "WebMail.Domain\WebMail.Domain.csproj", "{EC648761-5A07-4EC6-97F5-39A64D6CB71E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebMail.Infrastructure", "WebMail.Infrastructure\WebMail.Infrastructure.csproj", "{A9A36410-F2BF-4EA7-B193-4EB725783770}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebMail.Infrastructure", "WebMail.Infrastructure\WebMail.Infrastructure.csproj", "{A9A36410-F2BF-4EA7-B193-4EB725783770}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

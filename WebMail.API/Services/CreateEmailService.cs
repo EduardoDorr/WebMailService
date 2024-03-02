@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+
 using WebMail.API.Dtos;
 using WebMail.API.Interfaces;
 using WebMail.Domain.Models;
@@ -21,7 +22,8 @@ namespace WebMail.API.Services
 
         public async Task<CreateEmailResponse> CreateEmail(CreateEmailRequest createEmailRequest)
         {
-            _logger.LogInformation("Requisição para criação de um e-mail", createEmailRequest);
+            _logger.LogDebug("Requisição para criação de um e-mail", createEmailRequest);
+
             var email = _mapper.Map<Email>(createEmailRequest);
             email.GenerationDate = DateTime.Now;
 
@@ -32,7 +34,8 @@ namespace WebMail.API.Services
 
         public async Task<GetEmailResponse> GetEmailById(int id)
         {
-            _logger.LogInformation("Requisição para buscar um e-mail de id {id}", id);
+            _logger.LogDebug("Requisição para buscar um e-mail de id {id}", id);
+
             var email = await _repository.GetEmailById(id);
 
             var result = _mapper.Map<GetEmailResponse>(email);

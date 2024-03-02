@@ -1,8 +1,9 @@
-﻿using MimeKit;
-using MimeKit.Text;
+﻿using System.Collections.Concurrent;
+
+using MimeKit;
 using MailKit.Net.Smtp;
 using MailKit.Security;
-using System.Collections.Concurrent;
+
 using WebMail.API.Interfaces;
 using WebMail.Infrastructure.Interfaces;
 
@@ -42,6 +43,7 @@ namespace WebMail.API.Services
                 await SendEmails();
 
                 _logger.LogInformation("Encerrando envio de e-mails");
+
                 await Task.Delay(_timeDelay, stoppingToken);
             }
         }
@@ -49,14 +51,15 @@ namespace WebMail.API.Services
         public async Task SendEmails()
         {
             var emails = (await _repository.GetEmailsNotSended()).ToList();
-            _logger.LogInformation("Foram encontrados {count} e-mails", emails.Count);
 
-            if (!emails.Any())
+            _logger.LogDebug("Foram encontrados {count} e-mails", emails.Count);
+
+            if (emails.Count == 0)
                 return;
 
             var partitioner = Partitioner.Create(0, emails.Count);
 
-            Parallel.ForEach(partitioner, range =>
+            Parallel.ForEach(partitioner, async range =>
             {
                 using var smtpClient = new SmtpClient();
 
@@ -67,12 +70,12 @@ namespace WebMail.API.Services
 
                     for (int i = range.Item1; i < range.Item2; i++)
                     {
-                        var mailMessage = CreateMessage(emails[i].Origin, emails[i].Destiny, emails[i].Subject, emails[i].Body);
+                        var mailMessage = CreateMessage(emails[i].Origin, emails[i].Destiny, emails[i].Subject, emails[i].Body, emails[i].Attachment);
 
                         try
                         {
-                            smtpClient.Send(mailMessage);
-                            _repository.UpdateEmail(emails[i].Id);
+                            await smtpClient.SendAsync(mailMessage);
+                            await _repository.UpdateEmail(emails[i].Id);
                         }
                         catch (Exception ex)
                         {
@@ -92,13 +95,20 @@ namespace WebMail.API.Services
             });
         }
 
-        private MimeMessage CreateMessage(string origin, string toMail, string subject, string body)
+        private MimeMessage CreateMessage(string origin, string toMail, string subject, string? body, string? attachment = null)
         {
             var mailMessage = new MimeMessage();
             mailMessage.From.Add(new MailboxAddress("EmailService", _sender));
             mailMessage.To.Add(new MailboxAddress("Destiny", toMail));
             mailMessage.Subject = $"{origin} - {subject}";
-            mailMessage.Body = new TextPart(TextFormat.Html) { Text = body };
+
+            var bodyBuilder = new BodyBuilder();
+            bodyBuilder.HtmlBody = body;
+
+            if (attachment is not null)
+                bodyBuilder.Attachments.Add(attachment);
+
+            mailMessage.Body = bodyBuilder.ToMessageBody();
 
             return mailMessage;
         }
