@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-using WebMail.API.Dtos;
-using WebMail.API.Interfaces;
+using WebMail.Application.Dtos;
+using WebMail.Application.Interfaces;
 
 namespace WebMail.API.Controllers
 {

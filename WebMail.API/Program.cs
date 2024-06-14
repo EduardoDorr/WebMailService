@@ -1,17 +1,22 @@
+using System.Reflection;
+
 using Microsoft.OpenApi.Models;
 
 using Serilog;
 
-using WebMail.API.Services;
-using WebMail.API.Interfaces;
-using WebMail.Infrastructure.Interfaces;
+using WebMail.Domain.Repositories;
+using WebMail.Application.Options;
+using WebMail.Application.Services;
+using WebMail.Application.Interfaces;
 using WebMail.Infrastructure.Repositories;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseWindowsService();
-var connectionString = builder.Configuration.GetValue<string>("DatabaseSettings:ConnectionString");
-var port = builder.Configuration.GetValue<int>("ApiSettings:Port");
+
+var configuration = builder.Configuration;
+var connectionString = configuration.GetValue<string>("DatabaseSettings:ConnectionString");
+var port = configuration.GetValue<int>("ApiSettings:Port");
+
 ConfigureSerilog(builder, connectionString);
 
 try
@@ -34,20 +39,24 @@ finally
 }
 
 
-static void ConfigureServices(IServiceCollection services)
+void ConfigureServices(IServiceCollection services)
 {
-    // add Serilog as the log provider.
     services.AddLogging(loggingBuilder =>
     {
         loggingBuilder.ClearProviders();
         loggingBuilder.AddSerilog();
     });
 
+    services.Configure<ServiceOptions>(options => configuration.GetSection(nameof(ServiceOptions)).Bind(options));
+
+    services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
     services.AddSingleton<IEmailRepository, EmailRepository>();
     services.AddScoped<ICreateEmailService, CreateEmailService>();
-    services.AddAutoMapper(Assembly.GetExecutingAssembly());
     services.AddHostedService<SendEmailService>();
+
     services.AddControllers();
+
     services.AddEndpointsApiExplorer();
     services.AddSwaggerGen(s =>
     {
@@ -65,7 +74,7 @@ static void ConfigureServices(IServiceCollection services)
     });
 }
 
-static void ConfigureApplication(WebApplication app)
+void ConfigureApplication(WebApplication app)
 {
     if (app.Environment.IsDevelopment())
     {
@@ -73,14 +82,14 @@ static void ConfigureApplication(WebApplication app)
         app.UseSwaggerUI();
     }
 
-    //app.UseHttpsRedirection();
+    app.UseHttpsRedirection();
 
     app.UseAuthorization();
 
     app.MapControllers();
 }
 
-static void ConfigureSerilog(WebApplicationBuilder builder, string connectionString)
+void ConfigureSerilog(WebApplicationBuilder builder, string connectionString)
 {
     Log.Logger = new LoggerConfiguration()
             .ReadFrom.Configuration(builder.Configuration)

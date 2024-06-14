@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebMail.Domain", "WebMail.D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebMail.Infrastructure", "WebMail.Infrastructure\WebMail.Infrastructure.csproj", "{A9A36410-F2BF-4EA7-B193-4EB725783770}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebMail.Application", "WebMail.Application\WebMail.Application.csproj", "{C6950B3C-C935-4551-A163-9EADDEC8B2E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{A9A36410-F2BF-4EA7-B193-4EB725783770}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9A36410-F2BF-4EA7-B193-4EB725783770}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9A36410-F2BF-4EA7-B193-4EB725783770}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6950B3C-C935-4551-A163-9EADDEC8B2E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6950B3C-C935-4551-A163-9EADDEC8B2E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6950B3C-C935-4551-A163-9EADDEC8B2E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6950B3C-C935-4551-A163-9EADDEC8B2E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

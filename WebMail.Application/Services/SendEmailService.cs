@@ -1,19 +1,26 @@
 ﻿using System.Collections.Concurrent;
 
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
+
 using MimeKit;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 
-using WebMail.API.Interfaces;
-using WebMail.Infrastructure.Interfaces;
+using WebMail.Domain.Repositories;
+using WebMail.Application.Interfaces;
+using WebMail.Application.Options;
 
-namespace WebMail.API.Services
+namespace WebMail.Application.Services
 {
     public class SendEmailService : BackgroundService, ISendEmailService
     {
         private readonly ILogger<SendEmailService> _logger;
         private readonly IConfiguration _configuration;
         private readonly IEmailRepository _repository;
+        private readonly ServiceOptions _serviceOptions;
 
         private readonly string _host;
         private readonly string _sender;
@@ -21,17 +28,18 @@ namespace WebMail.API.Services
         private readonly int _port;
         private readonly int _timeDelay;
 
-        public SendEmailService(IConfiguration configuration, IEmailRepository repository, ILogger<SendEmailService> logger)
+        public SendEmailService(IConfiguration configuration, IEmailRepository repository, IOptions<ServiceOptions> serviceOptions, ILogger<SendEmailService> logger)
         {
             _configuration = configuration;
             _repository = repository;
             _logger = logger;
+            _serviceOptions = serviceOptions.Value;
 
-            _port = _configuration.GetValue<int>("EmailSettings:Port");
-            _host = _configuration.GetValue<string>("EmailSettings:Host");
-            _sender = _configuration.GetValue<string>("EmailSettings:Sender");
-            _password = _configuration.GetValue<string>("EmailSettings:Password");
-            _timeDelay = _configuration.GetValue<int>("SendEmailService:TimeDelay");
+            _port = _serviceOptions.Port;
+            _host = _serviceOptions.Host;
+            _sender = _serviceOptions.Sender;
+            _password = _serviceOptions.Password;
+            _timeDelay = _serviceOptions.TimeDelay;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
