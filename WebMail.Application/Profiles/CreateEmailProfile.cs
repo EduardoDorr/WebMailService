@@ -9,7 +9,6 @@ public class CreateEmailProfile : Profile
 {
     public CreateEmailProfile()
     {
-        CreateMap<CreateEmailRequest, Email>();
-        CreateMap<Email, CreateEmailResponse>();
+        CreateMap<CreateEmailRequest, Email>().ReverseMap();
     }
 }

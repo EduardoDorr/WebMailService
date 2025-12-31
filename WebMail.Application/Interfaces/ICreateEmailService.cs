@@ -4,6 +4,6 @@ namespace WebMail.Application.Interfaces;
 
 public interface ICreateEmailService
 {
-    Task<GetEmailResponse> GetEmailById(int id);
-    Task<CreateEmailResponse> CreateEmail(CreateEmailRequest emailRequest);
+    Task<CreateEmailResponse> CreateEmailAsync(CreateEmailRequest request, CancellationToken cancellationToken = default);
+    Task<GetEmailResponse> GetEmailByIdAsync(int id, CancellationToken cancellationToken = default);
 }

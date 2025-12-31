@@ -1,13 +1,12 @@
 ﻿using System.Text;
-using System.Data.SqlClient;
-
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Configuration;
 
 using Dapper;
 
-using WebMail.Domain.Models;
-using WebMail.Domain.Interfaces;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
+
+using WebMail.Domain.Entities;
+using WebMail.Domain.Repositories;
 
 namespace WebMail.Infrastructure.Repositories;
 

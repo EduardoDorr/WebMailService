@@ -6,4 +6,4 @@ public sealed record GetEmailResponse(
     string Subject,
     string? Body,
     DateTime GenerationDate,
-    DateTime SendDate);
+    DateTime? SendDate);

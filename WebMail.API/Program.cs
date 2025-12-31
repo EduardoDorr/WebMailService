@@ -15,7 +15,7 @@ try
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "O aplicativo encontrou um erro durante a execu��o.");
+    Log.Fatal(ex, "O aplicativo encontrou um erro durante a execução.");
 }
 finally
 {

@@ -1,6 +1,9 @@
-﻿namespace WebMail.Application.Interfaces;
+﻿using WebMail.Domain.Entities;
+
+namespace WebMail.Application.Interfaces;
 
 public interface ISendEmailService
 {
-    Task SendEmails();
+    Task<bool> SendEmailAsync(Email email, CancellationToken cancellationToken = default);
+    Task SendEmailsAsync(CancellationToken cancellationToken = default);
 }

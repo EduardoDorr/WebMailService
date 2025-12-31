@@ -3,14 +3,18 @@
 using MailKit.Net.Smtp;
 using MailKit.Security;
 
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+
 using MimeKit;
 
-using WebMail.API.Dtos;
-using WebMail.API.Interfaces;
-using WebMail.Domain.Interfaces;
-using WebMail.Domain.Models;
+using WebMail.Application.Dtos;
+using WebMail.Application.Interfaces;
+using WebMail.Application.Options;
+using WebMail.Domain.Entities;
+using WebMail.Domain.Repositories;
 
-namespace WebMail.API.Services;
+namespace WebMail.Application.Services;
 
 public class EmailService : ICreateEmailService, ISendEmailService
 {
@@ -26,17 +30,17 @@ public class EmailService : ICreateEmailService, ISendEmailService
     public EmailService(
         IEmailRepository repository,
         IMapper mapper,
-        IConfiguration configuration,
+        IOptions<ServiceOptions> options,
         ILogger<EmailService> logger)
     {
         _repository = repository;
         _mapper = mapper;
         _logger = logger;
 
-        _port = configuration.GetValue<int>("EmailSettings:Port");
-        _host = configuration.GetValue<string>("EmailSettings:Host");
-        _sender = configuration.GetValue<string>("EmailSettings:Sender");
-        _password = configuration.GetValue<string>("EmailSettings:Password");
+        _port = options.Value.Port;
+        _host = options.Value.Host;
+        _sender = options.Value.Sender;
+        _password = options.Value.Password;
     }
 
     public async Task<CreateEmailResponse> CreateEmailAsync(CreateEmailRequest request, CancellationToken cancellationToken = default)
@@ -49,7 +53,7 @@ public class EmailService : ICreateEmailService, ISendEmailService
 
         _ = Task.Run(() => SendEmailAsync(email, CancellationToken.None));
 
-        return new CreateEmailResponse() { Id = id, GenerationDate = email.GenerationDate };
+        return new CreateEmailResponse(id, email.GenerationDate);
     }
 
     public async Task<GetEmailResponse> GetEmailByIdAsync(int id, CancellationToken cancellationToken = default)

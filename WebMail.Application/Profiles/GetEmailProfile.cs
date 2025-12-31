@@ -9,6 +9,6 @@ public class GetEmailProfile : Profile
 {
     public GetEmailProfile()
     {
-        CreateMap<Email, GetEmailResponse>();
+        CreateMap<Email, GetEmailResponse>().ReverseMap();
     }
 }

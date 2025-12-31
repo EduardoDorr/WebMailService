@@ -1,8 +1,14 @@
 ﻿using System.Diagnostics;
 
-using WebMail.API.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
-namespace WebMail.API.Services;
+using WebMail.Application.Interfaces;
+using WebMail.Application.Options;
+
+namespace WebMail.Application.Services;
 
 public class EmailJobService : BackgroundService
 {
@@ -11,13 +17,13 @@ public class EmailJobService : BackgroundService
     private readonly int _timeDelay;
 
     public EmailJobService(
-        IConfiguration configuration,
+        IOptions<ServiceOptions> options,
         IServiceProvider serviceProvider,
         ILogger<EmailJobService> logger)
     {
         _serviceProvider = serviceProvider;
         _logger = logger;
-        _timeDelay = configuration.GetValue<int>("SendEmailService:TimeDelay");
+        _timeDelay = options.Value.TimeDelay;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)

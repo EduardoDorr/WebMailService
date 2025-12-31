@@ -1,6 +1,6 @@
-﻿using WebMail.Domain.Models;
+﻿using WebMail.Domain.Entities;
 
-namespace WebMail.Domain.Interfaces;
+namespace WebMail.Domain.Repositories;
 
 public interface IEmailRepository
 {
